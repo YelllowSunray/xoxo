@@ -1,0 +1,37 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "performers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isOnline",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "lastSeen",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "performers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "gender",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isOnline",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "lastSeen",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

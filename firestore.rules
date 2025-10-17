@@ -1,0 +1,71 @@
+// Firestore Security Rules for XOXO App
+// These rules allow authenticated users to read and write their own data
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can read and write their own profile data
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Performers collection - users can update their own, anyone can read
+    match /performers/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Presence/online status - users can update their own, anyone can read
+    match /presence/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Test collection for connection testing (development only)
+    match /test/{document} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Public read-only config
+    match /config/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Call invites: caller or callee can read/write
+    match /calls/{callId} {
+      allow create: if request.auth != null
+                     && request.resource.data.callerId == request.auth.uid;
+      allow read, update, delete: if request.auth != null
+                                   && (request.auth.uid == resource.data.callerId
+                                       || request.auth.uid == resource.data.calleeId);
+    }
+    
+    // Recordings - owner can write, authenticated users can read public ones
+    match /recordings/{recordingId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && (resource.data.isPublic == true || resource.data.ownerId == request.auth.uid);
+      allow update, delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
+    }
+    
+    // Transactions - users can create and read their own
+    match /transactions/{transactionId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow update, delete: if false;
+    }
+    
+    // WebRTC signaling rooms
+    match /webrtcRooms/{roomId} {
+      allow create, read, update: if request.auth != null;
+      allow delete: if false;
+      match /signals/{signalId} {
+        allow create: if request.auth != null;
+        allow read: if request.auth != null;
+        allow delete: if request.auth != null;
+        allow update: if false;
+      }
+    }
+  }
+}

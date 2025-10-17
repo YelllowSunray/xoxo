@@ -1,0 +1,27 @@
+rules_version = '2';
+
+// Firebase Storage Security Rules for XOXO App
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // User profile images - users can read anyone's profile image, but only write their own
+    match /users/{userId}/profile.jpg {
+      allow read: if true;  // Anyone can view profile pictures
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Video recordings - only the uploader can write, authenticated users can read if public
+    match /recordings/{userId}/{recordingId} {
+      allow read: if request.auth != null;  // Authenticated users can view recordings
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Temporary rule for testing - REMOVE IN PRODUCTION
+    // ⚠️ WARNING: This allows ALL uploads for testing purposes only!
+    // TODO: Remove this before deploying to production
+    match /{allPaths=**} {
+      allow read, write: if true;
+    }
+  }
+}
+
