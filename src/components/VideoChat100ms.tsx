@@ -265,7 +265,7 @@ function RemoteVideo({ peer }: { peer: any }) {
     trackId: peer.videoTrack,
   });
 
-  return <video ref={videoRef} autoPlay playsInline muted={false} className="w-full h-full object-cover" />;
+  return <video ref={videoRef} autoPlay playsInline muted={false} className="w-full h-full object-contain" />;
 }
 
 // Helper component to render local video

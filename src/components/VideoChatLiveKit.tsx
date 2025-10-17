@@ -339,10 +339,9 @@ function CustomVideoUI({
           <VideoTrack
             trackRef={remoteVideoTrack}
             style={{ 
-              width: isRemoteVertical ? "auto" : "100%", 
+              width: "100%", 
               height: "100%", 
-              maxWidth: isRemoteVertical ? "50%" : "100%",
-              objectFit: isRemoteVertical ? "contain" : "cover" 
+              objectFit: "contain"
             }}
           />
         ) : (

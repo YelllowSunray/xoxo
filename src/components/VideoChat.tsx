@@ -227,7 +227,7 @@ export default function VideoChat({ partnerId, partnerName, onEndCall, connectio
           ref={remoteVideoRef}
           autoPlay
           playsInline
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain"
         />
 
           {needsUserGesture && (
